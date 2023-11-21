@@ -3,5 +3,10 @@
         "api/**/*.js": {
             "runtime": "nodejs16.17.0"
         }
-    }
+    },
+
+    "rewrites": [
+        {"source": "(.*)", "destination": "/"}
+    ]
 }
+

@@ -1,0 +1,7 @@
+{
+    "functions": {
+        "api/**/*.js": {
+            "runtime": "nodev16.17.0"
+        }
+    }
+}

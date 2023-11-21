@@ -1,7 +1,7 @@
 {
     "functions": {
         "api/**/*.js": {
-            "runtime": "nodejs16.17"
+            "runtime": "nodejs16.17.0"
         }
     }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "Netlifyserver",
+  "name": "serverless",
   "version": "1.0.0",
   "description": "node express test",
   "main": "index.js",

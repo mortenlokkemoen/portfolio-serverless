@@ -4,12 +4,28 @@ const router = express.Router();
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 const serverless = require("serverless-http");
-
+const indexRouter = require('../api/index');
 // Server used for sending emails
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/", router);
+
+const whitelist = [
+    '*'
+];
+
+app.use((req, res, next ) => {
+    const origin = req.get('referer');
+    const isWhitelisted = whitelist.find((w) => origin && origin.includes(w));
+    if (isWhitelisted) {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+        res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,Content-Type,Authorization');
+        res.setHeader('Access-Control-Allow-Credentials', true);
+  } if (req.method === 'OPTIONS') res.sendStatus(200);
+    else next();
+})
 
 const contactEmail = nodemailer.createTransport({
     service: 'gmail',

@@ -5,19 +5,14 @@ const cors = require("cors");
 const nodemailer = require("nodemailer");
 const serverless = require("serverless-http");
 
-
-//Server used for sending emails
-
+// Server used for sending emails
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/", router);
 
-
-
 const contactEmail = nodemailer.createTransport({
     service: 'gmail',
-    Host: "oauth2.googleapis.com",
     auth: {
         type: 'OAuth2',
         user: "mortenlokkemoen@gmail.com",
@@ -27,7 +22,6 @@ const contactEmail = nodemailer.createTransport({
         refreshToken: process.env.AUTH_REFRESH_TOKEN,
         accessToken: process.env.AUTH_ACCESS_TOKEN,
     },
-    
 });
 
 contactEmail.verify((error) => {
@@ -38,7 +32,7 @@ contactEmail.verify((error) => {
     }
 });
 
-router.use("/contact", (req, res, next) => {
+router.use("/api/contact", (req, res, next) => {
     contactEmail.verify((error) => {
         if (error) {
             console.log(error);

@@ -1,4 +1,17 @@
 {
+  "name": "Netlifyserver",
+  "version": "1.0.0",
+  "description": "node express test",
+  "main": "index.js",
+  "engines": {
+    "node": "16.x"
+  },
+
+"scripts": {
+  "start": "node index.js",
+  "test": "echo \"Error: no test specified\"&& exit 1"
+},
+
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -9,3 +22,4 @@
     "serverless-http": "^3.2.0"
   }
 }
+

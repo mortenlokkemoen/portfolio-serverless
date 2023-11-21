@@ -1,0 +1,3 @@
+[[functions]]
+  path = "functions/sendEmail.js"
+  command = "sendEmail.handler"

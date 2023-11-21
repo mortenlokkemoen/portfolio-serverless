@@ -1,3 +1,7 @@
 [functions]
-  path = "functions/sendEmail.js"
+  [functions.path]
+  external_node_modules = [
+    "module-one",
+    "module-two"
+  ]
   command = "sendEmail.handler"

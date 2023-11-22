@@ -30,6 +30,7 @@ exports.handler = async function (event, context) {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Headers": "Content-Type",
       "Access-Control-Allow-Methods": "POST",
+      "Content-Type": "application/json",
     };
 
     const json = JSON.parse(event.body);
@@ -55,6 +56,7 @@ exports.handler = async function (event, context) {
         "Access-Control-Allow-Origin": '*',
         "Access-Control-Allow-Headers": "Content-Type",
         "Access-Control-Allow-Methods": "POST",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ error: err.toString() }),
     };

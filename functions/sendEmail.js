@@ -3,10 +3,12 @@ const nodemailer = require('nodemailer');
 
 function createMailClient() {
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
     auth: {
       type: 'OAuth2',
-      user: 'mortenlokkemoen@gmail.com',
+      user: process.env.MAIL_USER,
       clientId: process.env.AUTH_CLIENT_ID,
       clientSecret: process.env.AUTH_CLIENT_SECRET,
       refreshToken: process.env.AUTH_REFRESH_TOKEN,
@@ -17,29 +19,44 @@ function createMailClient() {
 
 exports.handler = async function (event, context) {
   try {
+    if (event.httpMethod !== 'POST') {
+      return {
+        satusCode: 405, //Method not allowed
+        body: JSON.stringify({ error: "Method Not Allowed"}),
+      };
+    }
+
+    const headers = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Methods": "POST",
+    };
+
     const json = JSON.parse(event.body);
-    const contactEmail = createMailClient();
-    
-    const mail = {
+    const gmailResponse = await mailClient.sendMail({
       from: json.name,
-      to: 'mortenlokkemoen@gmail.com',
+      to: process.env.MAIL_USER,
       subject: 'Contact Form Submission - Portfolio',
       html: `<p>Name: ${json.name}</p>
              <p>Email: ${json.email}</p>
              <p>Subject: ${json.subject}</p>
              <p>Message: ${json.message}</p>`,
-    };
-
-    await contactEmail.sendMail(mail);
-
+    });
+    
     return {
       statusCode: 200,
-      body: JSON.stringify({ code: 200, status: 'Message sent' }),
+      headers,
+      body: "Message sent!" + gmailResponse.messageId,
     };
   } catch (err) {
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'Internal Server Error' }),
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Methods": "POST",
+      },
+      body: JSON.stringify({ error: err.toString() }),
     };
   }
 };

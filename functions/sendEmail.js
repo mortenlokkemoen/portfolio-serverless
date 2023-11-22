@@ -20,7 +20,7 @@ function createMailClient() {
 exports.handler = async function (event, context) {
   // Move the headers declaration here
   const headers = {
-    "Access-Control-Allow-Origin": "https://codedevmorten.net/",
+    "Access-Control-Allow-Origin": "https://codedevmorten.net",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Methods": "OPTIONS, POST",
     "Content-Type": "application/json",

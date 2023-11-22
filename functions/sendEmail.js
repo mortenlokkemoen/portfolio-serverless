@@ -3,34 +3,18 @@ const nodemailer = require('nodemailer');
 
 function createMailClient() {
   return nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
+    service: 'gmail',
     auth: {
       type: 'OAuth2',
       user: process.env.MAIL_USER,
       clientId: process.env.AUTH_CLIENT_ID,
       clientSecret: process.env.AUTH_CLIENT_SECRET,
       refreshToken: process.env.AUTH_REFRESH_TOKEN,
-      accessToken: process.env.AUTH_ACCESS_TOKEN,
-      expires: process.env.TOKEN_EXPIRY_TIME,
     },
   });
 }
 
 
-async function refreshAccessToken(mailClient) {
-  const { user, clientId, clientSecret, refreshToken } = mailClient.transporter.options.auth;
-  const oauth2Client = createOAuth2Client(clientId, clientSecret);
-  const newTokens = await oauth2Client.refreshAccessToken(refreshToken);
-  mailClient.transporter.options.auth.accessToken = newTokens.credentials.access_token;
-  mailClient.transporter.options.auth.expires = newTokens.credentials.expiry_date;
-}
-
-function createOAuth2Client(clientId, clientSecret) {
-  const { OAuth2 } = require('google-auth-library');
-  return new OAuth2(clientId, clientSecret, 'https://developers.google.com/oauthplayground');
-}
 
 exports.handler = async function (event, context) {
   const headers = {
@@ -62,11 +46,6 @@ exports.handler = async function (event, context) {
     const json = JSON.parse(event.body);
     const mailClient = createMailClient();
     
-    const currentTimestamp = Math.floor(Date.now() / 1000);
-    if (mailClient.transporter.options.auth.expires < currentTimestamp) {
-      await refreshAccessToken(mailClient);
-    }
-
 
     const gmailResponse = await mailClient.sendMail({
       from: json.name,

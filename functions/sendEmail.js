@@ -52,7 +52,7 @@ exports.handler = async function (event, context) {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Origin": 'https://codedevmorten.net/',
+        "Access-Control-Allow-Origin": '*',
         "Access-Control-Allow-Headers": "Content-Type",
         "Access-Control-Allow-Methods": "POST",
       },

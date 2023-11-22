@@ -27,6 +27,7 @@ exports.handler = async function (event, context) {
 
   try {
     if (event.httpMethod === 'OPTIONS') {
+      console.log('HTTP Method:', event.httpMethod);
       return {
         statusCode: 200,
         headers,

@@ -57,7 +57,7 @@ exports.handler = async function (event, context) {
     return {
       statusCode: 200,
       headers,
-      body: "Message sent!" + gmailResponse.messageId,
+      body: JSON.stringify({ message: "Message sent!", messageId: gmailResponse.messageId }),
     };
   } catch (err) {
     return {

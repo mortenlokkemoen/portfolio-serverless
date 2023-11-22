@@ -39,10 +39,13 @@ exports.handler = async function (event, context) {
         statusCode: 405,
         headers,
         body: JSON.stringify({ error: "Method Not Allowed" }),
+        
       };
+
     }
 
     const json = JSON.parse(event.body);
+    console.log('HTTP Method:', event.httpMethod);
     const mailClient = createMailClient(); 
     const gmailResponse = await mailClient.sendMail({
       from: json.name,

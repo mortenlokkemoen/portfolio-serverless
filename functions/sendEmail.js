@@ -18,22 +18,33 @@ function createMailClient() {
 }
 
 exports.handler = async function (event, context) {
+  // Move the headers declaration here
+  const headers = {
+    "Access-Control-Allow-Origin": "https://codedevmorten.net/",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "OPTIONS, POST",
+    "Content-Type": "application/json",
+  };
+
   try {
     if (event.httpMethod !== 'POST') {
       return {
         statusCode: 405, //Method not allowed
-        body: JSON.stringify({ error: "Method Not Allowed"}),
+        headers,
+        body: JSON.stringify({ error: "Method Not Allowed" }),
       };
     }
 
-    const headers = {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Headers": "Content-Type",
-      "Access-Control-Allow-Methods": "POST",
-      "Content-Type": "application/json",
-    };
+    if (event.httpMethod === 'OPTIONS') {
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({})
+      };
+    }
 
     const json = JSON.parse(event.body);
+    const mailClient = createMailClient(); // Move this line here
     const gmailResponse = await mailClient.sendMail({
       from: json.name,
       to: process.env.MAIL_USER,
@@ -43,7 +54,7 @@ exports.handler = async function (event, context) {
              <p>Subject: ${json.subject}</p>
              <p>Message: ${json.message}</p>`,
     });
-    
+
     return {
       statusCode: 200,
       headers,
@@ -52,12 +63,7 @@ exports.handler = async function (event, context) {
   } catch (err) {
     return {
       statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": '*',
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "POST",
-        "Content-Type": "application/json",
-      },
+      headers,
       body: JSON.stringify({ error: err.toString() }),
     };
   }

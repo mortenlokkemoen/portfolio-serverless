@@ -1,7 +1,5 @@
 [functions]
-  [functions.path]
-  external_node_modules = [
-    "module-one",
-    "module-two"
-  ]
+  directory = "functions"
+  node_bundler = "esbuild"
   command = "sendEmail.handler"
+  
